@@ -123,6 +123,7 @@ class RawDialog extends HTMLElement {
 
     this.dialog.addEventListener("close", this.handleClose);
     this.dialog.addEventListener("cancel", this.handleCancel);
+    this.dialog.addEventListener("click", this.handleBackdropClick);
 
     this.setupAccessibility();
   }
@@ -130,6 +131,7 @@ class RawDialog extends HTMLElement {
   disconnectedCallback() {
     this.dialog?.removeEventListener("close", this.handleClose);
     this.dialog?.removeEventListener("cancel", this.handleCancel);
+    this.dialog?.removeEventListener("click", this.handleBackdropClick);
   }
 
   private handleClose = () => {
@@ -144,6 +146,18 @@ class RawDialog extends HTMLElement {
     const cancelEvent = new Event("cancel", { cancelable: true });
     if (this.root?.dispatchEvent(cancelEvent)) {
       this.root?.close();
+    }
+  };
+
+  private handleBackdropClick = (e: Event) => {
+    // Check if click is on backdrop or panel (but not on content inside panel)
+    const target = e.target as HTMLElement;
+    const isBackdrop = target.tagName.toLowerCase() === "raw-dialog-backdrop";
+    const isPanel = target.tagName.toLowerCase() === "raw-dialog-panel";
+
+    if ((isBackdrop || isPanel) && this.root?.dismissable) {
+      this.root.close();
+      e.stopPropagation();
     }
   };
 
@@ -189,23 +203,10 @@ class RawDialogBackdrop extends HTMLElement {
 
 // Dialog Panel
 class RawDialogPanel extends HTMLElement {
-  private root: RawDialogRoot | null = null;
-
   connectedCallback() {
-    this.root = this.closest("raw-dialog-root");
-    this.addEventListener("click", this.handleClick);
+    // Just a container element, no behavior needed
+    // Backdrop click handling is now done in RawDialog
   }
-
-  disconnectedCallback() {
-    this.removeEventListener("click", this.handleClick);
-  }
-
-  private handleClick = (e: Event) => {
-    // Check if click is outside panel content (on the dialog backdrop)
-    if (e.target === this.closest("dialog") && this.root?.dismissable) {
-      this.root.close();
-    }
-  };
 }
 
 // Register components
