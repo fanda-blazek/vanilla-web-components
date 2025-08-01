@@ -91,10 +91,12 @@ When in modal mode, the dialog automatically prevents scrolling of the backgroun
 
 The scroll is locked if the dialog is open only in `modal` mode. The `dismissable` mode does not have any effect on scroll locking behavior.
 
-When the dialog is in `modal` and have other nested dialogs within it. The scroll stays locked until all of the dialogs including last (parent) one are closed. - This behavior is the same regardless of closing mechanism (eg. `escape` key is pressed).
+For nested dialogs, only the outermost (non-nested) dialog controls scroll locking. When you have nested dialogs, the scroll lock is managed by the root parent dialog and remains locked until all nested dialogs are closed. Child dialogs do not independently lock or unlock scroll, preventing premature scroll restoration when closing nested dialogs while parent dialogs remain open.
 
-### Optional Dismissible Behavior
-In modal mode, dialogs can optionally be dismissed by clicking outside the panel area or by clicking the `escape` key. This behavior can be controlled to prevent accidental dismissals when needed (like alert dialogs that should require users full attention).
+### Dismissible Behavior
+- Clicking the `escape` key always closes the dialog.
+- We should track if the user interacting (click and touch events probably) outside of the `raw-dialog-panel` component - if so and `dismissable` mode is enabled, close the dialog.
+- If the `dismissable` attribute is set to `false`, the dialog cannot be closed by clicking outside of it.
 
 ### Nested Dialog Support
 You can nest dialogs within one another normally. Use the `data-child-dialog-open` selector to customize the styling of the parent dialog.
