@@ -1,24 +1,11 @@
-import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import "./style.css";
+import viteLogo from "/vite.svg";
+import "../packages/raw-react-port/index";
+// import { dialogExample } from "../packages/raw-react-port/dialog-example";
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
+document.querySelector<HTMLDivElement>("#app")!.innerHTML = `
+  <div class="max-w-4xl mx-auto flex flex-col bg-gray-100 rounded-xl mt-8 gap-4 p-8">
+    <img src="${viteLogo}" class="h-24 p-6" alt="Vite logo" />
+    <h1 class="text-3xl font-bold text-center">Vite + TypeScript + Web Components</h1>
   </div>
-`
-
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+`;
